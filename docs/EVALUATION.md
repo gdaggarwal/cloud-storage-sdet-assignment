@@ -2,21 +2,43 @@
 
 This document outlines the evaluation criteria for the SDET assignment. The maximum possible score is 100 points.
 
-## 1. Test Strategy (40 points)
+## Code Authenticity Check (Pass/Fail)
 
-### 1.1 Test Coverage (15 points)
-- [ ] All API endpoints are covered (5 points)
-- [ ] Edge cases are considered (5 points)
-- [ ] Data integrity is verified (5 points)
+Before evaluation, all submissions will be analyzed for AI-generated code patterns. Submissions that show strong indicators of AI generation will be subject to additional scrutiny and may be disqualified if they violate the assignment's AI usage policy.
 
-### 1.2 Test Scenarios (15 points)
-- [ ] Happy path scenarios (5 points)
-- [ ] Error scenarios (5 points)
-- [ ] Boundary conditions (5 points)
+### Verification Process
+1. Automated analysis using our AI detection tool
+2. Manual code review for consistency and understanding
+3. Verification of problem-solving approach
+4. Check for contextual understanding of the requirements
 
-### 1.3 Performance Considerations (10 points)
-- [ ] Load testing approach (5 points)
-- [ ] Stress testing approach (5 points)
+## Part 1: Testing (100% of base score)
+
+### Code Authenticity (20%)
+- [ ] Evidence of original thought and problem-solving (5 points)
+- [ ] Consistent coding style throughout (5 points)
+- [ ] Appropriate level of comments and documentation (5 points)
+- [ ] Understanding of contextual requirements (5 points)
+
+### Test Strategy (30%)
+- Comprehensive test scenarios covering all requirements
+- Identification of edge cases and boundary conditions
+- Well-designed test data strategy
+- Consideration of performance and security aspects
+- Clear documentation of testing approach
+
+### Test Implementation (50%)
+- Correctness and completeness of test cases
+- Test coverage of all API endpoints and functionality
+- Proper error handling and validation
+- Code organization and readability
+- Use of appropriate test design patterns
+
+### Bug Reporting (20%)
+- Accuracy and clarity of bug reports
+- Reproduction steps for each issue
+- Expected vs actual behavior
+- Suggested fixes for critical issues
 
 ## 2. Test Implementation (40 points)
 

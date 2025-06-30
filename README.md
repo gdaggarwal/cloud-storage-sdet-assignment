@@ -1,10 +1,29 @@
-# Cloud Storage Tiering System - SDET Assignment
+# Cloud Storage Tiering# Cloud Storage SDET Assignment
 
-This repository contains the test automation assignment for SDET candidates at Lucidity. The assignment focuses on testing a Cloud Storage Tiering System that automatically manages data across different storage tiers based on access patterns.
+Welcome to the Cloud Storage Tiering System assignment! This assignment is designed to evaluate your skills in test automation and software development.
 
-## Problem Statement
+## IMPORTANT: AI/LLM Usage Policy
 
-See [PROBLEM_STATEMENT.md](docs/PROBLEM_STATEMENT.md) for detailed requirements and tasks.
+**The use of AI/LLM tools (including but not limited to ChatGPT, GitHub Copilot, etc.) is strictly prohibited for this assignment.**
+
+We employ advanced detection tools to identify AI-generated solutions. Any submission found to be generated or significantly assisted by AI/LLM tools will be automatically disqualified. This assignment is designed to evaluate your personal skills and understanding, and we want to ensure a fair evaluation for all candidates.
+
+### What we're looking for:
+- Your unique problem-solving approach
+- Your understanding of testing principles
+- Your ability to write clean, maintainable code
+- Your attention to edge cases and error handling
+
+### What we're not looking for:
+- Perfectly polished AI-generated solutions
+- Code that doesn't reflect your personal understanding
+- Solutions that don't address the specific requirements
+
+## Assignment Overview
+
+This is a two-part assignment:
+1. **Required**: Test the provided Cloud Storage Tiering System implementation
+2. **Bonus**: Implement improvements and new features
 
 ## Getting Started
 
@@ -41,10 +60,6 @@ cloud-storage-sdet-assignment/
 │   └── EVALUATION.md        # Evaluation criteria
 ├── src/                     # Source code
 │   └── storage_service.py   # Mock storage service
-├── tests/                   # Test files
-│   ├── functional/          # Functional tests
-│   ├── performance/         # Performance tests
-│   └── fault_injection/     # Fault injection tests
 ├── .github/workflows/       # CI/CD workflows
 │   └── tests.yml
 ├── requirements.txt         # Python dependencies

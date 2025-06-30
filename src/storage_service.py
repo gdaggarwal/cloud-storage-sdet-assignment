@@ -4,7 +4,7 @@ Mock Storage Service for Cloud Storage Tiering System
 import os
 import uuid
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from enum import Enum
 from typing import Dict, Optional, List, Tuple
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form, status
@@ -22,11 +22,23 @@ class FileMetadata(BaseModel):
     file_id: str
     filename: str
     size: int
-    tier: StorageTier
-    created_at: datetime
-    last_accessed: datetime
-    content_type: str
-    etag: str
+    tier: StorageTier = StorageTier.HOT
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    last_accessed: datetime = Field(default_factory=datetime.utcnow)
+    content_type: str = "application/octet-stream"
+    etag: str = ""
+    
+    def update_last_accessed(self, days_ago: int = 0):
+        """Update the last_accessed timestamp."""
+        self.last_accessed = datetime.utcnow() - timedelta(days=days_ago)
+    
+    def is_priority(self) -> bool:
+        """Check if this is a priority file."""
+        return "_PRIORITY_" in self.file_id.upper()
+    
+    def is_legal_document(self) -> bool:
+        """Check if this is a legal document."""
+        return self.file_id.upper().startswith("LEGAL_")
 
 class StorageStats(BaseModel):
     total_files: int
@@ -36,6 +48,9 @@ class StorageStats(BaseModel):
 # In-memory storage for demo purposes
 files_metadata: Dict[str, FileMetadata] = {}
 files_content: Dict[str, bytes] = {}
+
+# Test mode flag - controls test-specific behavior
+test_mode = False  # Set to True only in test environment
 
 # Tier configuration
 TIER_CONFIG = {
@@ -62,7 +77,7 @@ async def upload_file(file: UploadFile = File(...)):
     file_id = str(uuid.uuid4())
     content = await file.read()
     
-    # Basic validation
+    # Basic validation - always check size limits
     if len(content) < 1024 * 1024:  # 1MB minimum
         raise HTTPException(status_code=400, detail="File size must be at least 1MB")
     if len(content) > 10 * 1024 * 1024 * 1024:  # 10GB maximum
@@ -122,22 +137,67 @@ async def delete_file(file_id: str):
 async def run_tiering():
     """Run the tiering process to move files between storage tiers."""
     moved_count = 0
-    now = datetime.utcnow()
+    current_time = datetime.utcnow()
     
     for file_id, metadata in list(files_metadata.items()):
-        tier_config = TIER_CONFIG[metadata.tier]
-        
-        # Skip if this is the coldest tier or no next tier defined
-        if not tier_config["next_tier"]:
+        # Apply special business rules first
+        forced_tier = apply_special_rules(metadata)
+        if forced_tier:
+            if metadata.tier != forced_tier:
+                metadata.tier = forced_tier
+                moved_count += 1
             continue
+            
+        if metadata.tier == StorageTier.COLD:
+            continue  # Files in COLD tier don't move up automatically
+            
+        days_since_access = (current_time - metadata.last_accessed).days
+        config = TIER_CONFIG[metadata.tier]
         
         # Check if file should be moved to next tier
-        days_since_access = (now - metadata.last_accessed).days
-        if days_since_access >= tier_config["max_age_days"]:
-            metadata.tier = tier_config["next_tier"]
-            moved_count += 1
+        if config["max_age_days"] is not None and days_since_access >= config["max_age_days"]:
+            if config["next_tier"]:  # Only move if there is a next tier
+                metadata.tier = config["next_tier"]
+                moved_count += 1
     
     return {"status": "success", "files_moved": moved_count}
+
+def apply_special_rules(file_metadata: FileMetadata) -> Optional[str]:
+    """Apply special business rules that affect tiering decisions.
+    
+    Returns:
+        str: The tier to force the file into, or None to use normal tiering rules
+    """
+    # Files containing "_PRIORITY_" in filename should stay in HOT tier
+    if "_PRIORITY_" in file_metadata.filename.upper():
+        return StorageTier.HOT
+    
+    # Legal documents have extended retention in WARM tier (180 days instead of 90)
+    if file_metadata.filename.upper().startswith("LEGAL_"):
+        if file_metadata.tier == StorageTier.WARM:
+            current_time = datetime.utcnow()
+            days_since_access = (current_time - file_metadata.last_accessed).days
+            if days_since_access <= 180:  # Extended retention for legal docs
+                return StorageTier.WARM
+    
+    return None
+
+def parse_date(date_str: str, reference_date: datetime) -> datetime:
+    """Parse date string with special handling for pre-2023 dates.
+    
+    For files uploaded before 2023, dates use DD-MM-YYYY format.
+    For files uploaded in 2023 or later, use YYYY-MM-DD format.
+    """
+    try:
+        if reference_date.year < 2023:
+            return datetime.strptime(date_str, "%d-%m-%Y")
+        return datetime.strptime(date_str, "%Y-%m-%d")
+    except ValueError as e:
+        # Fallback to default parsing if format doesn't match
+        try:
+            return datetime.fromisoformat(date_str)
+        except ValueError:
+            raise ValueError(f"Invalid date format: {date_str}")
 
 class UpdateLastAccessedRequest(BaseModel):
     days_ago: int
