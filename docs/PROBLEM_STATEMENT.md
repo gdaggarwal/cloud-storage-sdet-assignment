@@ -1,7 +1,11 @@
 # Cloud Storage Tiering System - SDET Assignment
 
 ## Overview
-Design and implement test automation for a Cloud Storage Tiering System that automatically moves data between different storage tiers based on access patterns and policies.
+This assignment has two parts:
+1. **Main Task**: Design and implement comprehensive test automation for a Cloud Storage Tiering System
+2. **Bonus Challenge**: Implement additional features and fix identified issues in the service
+
+You'll be working with a system that automatically moves data between different storage tiers based on access patterns and policies.
 
 ## Problem Statement
 
@@ -42,12 +46,44 @@ You'll be testing a Cloud Storage Tiering System with the following components:
 - `GET /admin/stats` - Get system statistics
   - Response: `{ "totalFiles": 100, "hotTier": { "count": 30, "size": "300MB" }, ... }`
 
+## Part 1: Testing (Required)
+
 ### Your Tasks
 
-1. **Test Strategy (40%)**
+1. **Test Strategy (30%)**
    - Design a comprehensive test strategy document
    - Identify test scenarios including edge cases
    - Define test data requirements
+   - Document your testing approach and rationale
+
+2. **Test Implementation (50%)**
+   - Write comprehensive test cases for all API endpoints
+   - Include unit, integration, and system tests
+   - Test for both happy paths and error conditions
+   - Include performance and security test cases where applicable
+
+3. **Bug Report (20%)**
+   - Document any issues or bugs you find in the implementation
+   - Include steps to reproduce, expected vs actual behavior
+   - Suggest potential fixes for critical issues
+
+## Part 2: Implementation (Bonus)
+
+### Bonus Challenges
+
+1. **Fix Identified Issues**
+   - The implementation contains several known issues (documented in your bug report)
+   - Fix the most critical issues you've identified
+
+2. **Implement New Features**
+   - Add file versioning support
+   - Implement bulk operations (upload/download/delete)
+   - Add support for custom metadata
+
+3. **Performance Improvements**
+   - Optimize the tiering process
+   - Add pagination to list endpoints
+   - Implement caching where appropriate
    - Consider performance and reliability aspects
 
 2. **Test Automation (40%)**
