@@ -6,14 +6,6 @@ This document outlines the evaluation criteria for the SDET assignment. The maxi
 
 Before evaluation, all submissions will be analyzed for AI-generated code patterns. Submissions that show strong indicators of AI generation will be subject to additional scrutiny and may be disqualified if they violate the assignment's AI usage policy.
 
-### Indicators of AI-Generated Code
-- Overuse of generic or overly descriptive variable/function names
-- Inconsistent code style with the rest of the solution
-- Excessive or insufficient comments
-- AI-style documentation patterns
-- Lack of personal problem-solving approach
-- Solutions that don't align with the specific requirements
-
 ### Verification Process
 1. Automated analysis using our AI detection tool
 2. Manual code review for consistency and understanding
