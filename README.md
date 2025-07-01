@@ -73,29 +73,6 @@ cloud-storage-sdet-assignment/
 └── README.md               # This file
 ```
 
-## AI Detection Tool
-
-We use an AI detection tool to analyze submissions for patterns commonly found in AI-generated code. This tool checks for:
-
-- Generic or overly descriptive variable/function names
-- Excessive or insufficient comments
-- AI-style documentation patterns
-- Code structure patterns common in AI-generated code
-
-### Using the AI Detection Tool
-
-1. Install the required dependencies:
-   ```bash
-   pip install -r evaluation_tools/requirements.txt
-   ```
-
-2. Run the detector on a Python file or directory:
-   ```bash
-   python evaluation_tools/ai_detector.py path/to/file_or_directory
-   ```
-
-The tool will generate a report showing the likelihood of AI generation and any detected patterns.
-
 ## Running Tests
 
 Run all tests:
